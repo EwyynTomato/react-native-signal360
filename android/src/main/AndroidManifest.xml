@@ -1,0 +1,32 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.rnsignal360">
+    <application>
+        <!--
+        The Signal Service is the Guts of the Signal System and if you want to be able to hear Signal
+        Signals this is a required component as are all the other elements described within
+        -->
+        <service android:enabled="true" android:name="com.signal360.sdk.core.SignalService" android:exported="false"/>
+
+        <!--
+        The Signal Broadcast Receiver is used to manage internal dispatch messages, time ticks,
+        connectivity changes between Signal Apps
+        -->
+        <receiver android:enabled="true" android:name="com.signal360.sdk.core.SignalBroadcastReceiver" android:exported="false">
+            <intent-filter>
+                <!-- Internal Signal broadcasts -->
+                <action android:name="com.signal360.sdk.ACTION_GEO_UPDATE"/>
+            </intent-filter>
+        </receiver>
+    </application>
+
+    <!-- For enabling Signal based on location, GPS is NOT turned on.  -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- For audio signal decoding -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- For background processing of signal -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- For Bluetooth LE signals -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+</manifest>
+  
