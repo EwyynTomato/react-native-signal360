@@ -24,12 +24,16 @@ const Signal360 = {
 		RNSignal360.setAskPermissionString(text);
 	},
 
-	/**
+    /**
      * Start Signal360 service to listen to Sonic device
      */
-	start: function() {
+    start: function() {
         RNSignal360.start();
-	},
+    },
+
+	stop: function() {
+        RNSignal360.stop();
+    },
 };
 
 export default Signal360;

@@ -2,31 +2,18 @@
 package com.rnsignal360;
 
 import android.app.Activity;
-import android.util.Log;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.UiThreadUtil;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.signal360.sdk.core.Signal;
-import com.signal360.sdk.core.SignalClient;
-import com.signal360.sdk.core.SignalSdkStatus;
-import com.signal360.sdk.core.objects.SignalActivation;
-import com.signal360.sdk.core.objects.SignalActivationRule;
-import com.signal360.sdk.core.objects.SignalCodeHeard;
-import com.signal360.sdk.core.objects.SignalLocation;
 
-import java.util.List;
-import java.util.Map;
-
-public class RNSignal360Module extends ReactContextBaseJavaModule implements SignalClient {
+public class RNSignal360Module extends ReactContextBaseJavaModule {
     private String guid = "DEFAULT";
     private String askPermissionString = "LOCATION and MICROPHONE permission is required";
 
-    private static final String EMITTED_EVENT_NAME = "RNSignal360Event"; //If you change this, remember to also change it in index.js
+    private RNSignal360Client rnSignal360Client;
+    private boolean isInitialized = false;
 
     private final ReactApplicationContext reactContext;
 
@@ -51,6 +38,10 @@ public class RNSignal360Module extends ReactContextBaseJavaModule implements Sig
         Signal.get().onRequestPermissionsResult(activity, requestCode, permissions, grantResults);
     }
 
+    private Activity getActivity() {
+        return reactContext.getCurrentActivity();
+    }
+
     @ReactMethod
     public void setGuid(String guid) {
         this.guid = guid;
@@ -61,82 +52,30 @@ public class RNSignal360Module extends ReactContextBaseJavaModule implements Sig
         this.askPermissionString = askPermissionString;
     }
 
+    public void initialize() {
+        if (!this.isInitialized) {
+            rnSignal360Client = new RNSignal360Client(reactContext);
+            Signal.get().initialize(reactContext.getApplicationContext(), rnSignal360Client, guid);
+            Signal.get().start();
+            isInitialized = true;
+        }
+    }
+
     @ReactMethod
     public void start() {
-        Signal.get().initialize(reactContext.getApplicationContext(), RNSignal360Module.this, guid);
-        Signal.get().start();
+        this.initialize();
 
-        Activity activity = reactContext.getCurrentActivity();
+        Activity activity = getActivity();
 
         //- Check com.signal360.sdk.core.internal.SignalInternal > requestPermissions to customize request permission
         Signal.get().requestPermissions(activity, askPermissionString);
         Signal.get().onActivityResume(activity);
     }
 
-    @Override
-    public Boolean didHearCode(Signal signal, SignalCodeHeard codeHeard) {
-        //Call JS Callback on frontend with signal data
-        //React-native's Callback object can only be invoked ONCE, so we use RCTNativeAppEventEmitter instead
-        WritableMap map = Arguments.createMap();
-        map.putString("signalType", codeHeard.getSignalType());
-        map.putDouble("beaconCode", codeHeard.getBeaconCode());
-        RCTNativeAppEventEmitter eventEmitter = getReactApplicationContext().getJSModule(RCTNativeAppEventEmitter.class);
-        eventEmitter.emit(EMITTED_EVENT_NAME, map);
-        return true;
-    }
+    @ReactMethod
+    public void stop() {
+        Activity activity = getActivity();
 
-    @Override
-    public void didReceiveActivations(Signal signal, List<SignalActivation> list) {
-
-    }
-
-    @Override
-    public void cacheOfflineContent(Signal signal, List<SignalActivationRule> list) {
-
-    }
-
-    @Override
-    public void geoFenceEntered(SignalLocation signalLocation) {
-
-    }
-
-    @Override
-    public void geoFenceExited(SignalLocation signalLocation) {
-
-    }
-
-    @Override
-    public void geoFencesUpdated(List<SignalLocation> list) {
-
-    }
-
-    @Override
-    public void didStatusChange(SignalSdkStatus signalSdkStatus) {
-
-    }
-
-    @Override
-    public void didCompleteRegistration(boolean b) {
-
-    }
-
-    @Override
-    public void didUpdateConfiguration(boolean b) {
-
-    }
-
-    @Override
-    public void didUpdateUserData(boolean b) {
-
-    }
-
-    @Override
-    public Map<String, String> getTagsForCode(SignalCodeHeard signalCodeHeard, Map<String, String> map) {
-        return null;
-    }
-
-    @Override
-    public List<String> getBeaconTagsForConfig() {
-        return null;
+        Signal.get().onActivityPause(activity);
     }
 }
