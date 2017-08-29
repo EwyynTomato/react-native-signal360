@@ -1,12 +1,16 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
+import codeHeardQueue from './src/codeHeardQueue';
 
 const { RNSignal360 } = NativeModules;
 
 const Signal360 = {
 	addEventListener: function(callback) {
         new NativeEventEmitter(RNSignal360).addListener('RNSignal360Event', (data) => {
-        	console.log(`RNSignal360: emitted data: ${JSON.stringify(data)}`);
-            callback(data);
+            let beaconCode = data.beaconCode;
+            if (codeHeardQueue.shouldCodeInvokeCallback(beaconCode)) {
+                callback(data);
+            }
+            codeHeardQueue.heardCode(beaconCode);
         });
 	},
 
@@ -31,7 +35,7 @@ const Signal360 = {
         RNSignal360.start();
     },
 
-	stop: function() {
+    stop: function() {
         RNSignal360.stop();
     },
 };
