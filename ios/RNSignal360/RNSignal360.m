@@ -1,9 +1,8 @@
 
 #import "RNSignal360.h"
+#import <Signal360/SignalCodeHeard.h>
 
-@implementation RNSignal360 {
-    NSString *deviceGuid;
-}
+@implementation RNSignal360
 
 - (dispatch_queue_t)methodQueue
 {
@@ -12,7 +11,7 @@
 RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(setGuid:(NSString *)guid) {
-    deviceGuid = guid;
+    self.deviceGuid = guid;
 }
 
 RCT_EXPORT_METHOD(setAskPermissionString:(NSString *)text) {
@@ -23,7 +22,7 @@ RCT_EXPORT_METHOD(start) {
     [[Signal sharedInstance] requestLocationAlwaysPermission];
     [[Signal sharedInstance] requestNotificationPermission];
 
-    [[Signal sharedInstance] initializeWithApplicationGUID:deviceGuid andDelegate:self];
+    [[Signal sharedInstance] initializeWithApplicationGUID:self.deviceGuid andDelegate:self];
     [[Signal sharedInstance] start];
 }
 
@@ -34,7 +33,7 @@ RCT_EXPORT_METHOD(stop) {
 - (BOOL)signal:(Signal *)signal didHearCode:(SignalCodeHeard *)code {
     [self sendEventWithName:[self getEventName]
                        body:@{@"signalType": @"AUDIO",
-                              @"beaconCode": code}];
+                              @"beaconCode": [NSString stringWithFormat:@"%ld", code.beaconCode]}];
     return YES;
 }
 
