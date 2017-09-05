@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA48804D1F5D595400C7E67F /* Signal360.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA48804C1F5D594C00C7E67F /* Signal360.framework */; };
 		B3E7B58A1CC2AC0600A0062D /* RNSignal360.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNSignal360.m */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNSignal360.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNSignal360.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA48804C1F5D594C00C7E67F /* Signal360.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Signal360.framework; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNSignal360.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSignal360.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNSignal360.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSignal360.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -33,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA48804D1F5D595400C7E67F /* Signal360.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,10 +53,27 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				B3E7B5881CC2AC0600A0062D /* RNSignal360.h */,
-				B3E7B5891CC2AC0600A0062D /* RNSignal360.m */,
+				AA48804B1F5D594C00C7E67F /* Frameworks */,
+				AA48804A1F5D572600C7E67F /* RNSignal360 */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		AA48804A1F5D572600C7E67F /* RNSignal360 */ = {
+			isa = PBXGroup;
+			children = (
+				B3E7B5881CC2AC0600A0062D /* RNSignal360.h */,
+				B3E7B5891CC2AC0600A0062D /* RNSignal360.m */,
+			);
+			path = RNSignal360;
+			sourceTree = "<group>";
+		};
+		AA48804B1F5D594C00C7E67F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AA48804C1F5D594C00C7E67F /* Signal360.framework */,
+			);
+			path = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,8 +216,12 @@
 		58B511F01A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				HEADER_SEARCH_PATHS = (
-				"$(inherited)",
+					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
@@ -212,6 +236,10 @@
 		58B511F11A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
