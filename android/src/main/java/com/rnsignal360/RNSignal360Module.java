@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.signal360.sdk.core.Signal;
+import com.signal360.sdk.core.internal.SignalInternal;
 
 public class RNSignal360Module extends ReactContextBaseJavaModule {
     private String guid = "DEFAULT";
@@ -68,6 +69,7 @@ public class RNSignal360Module extends ReactContextBaseJavaModule {
         Activity activity = getActivity();
 
         //- Check com.signal360.sdk.core.internal.SignalInternal > requestPermissions to customize request permission
+        SignalInternal.getInternal().setUseBluetooth(true);
         Signal.get().requestPermissions(activity, askPermissionString);
         Signal.get().onActivityResume(activity);
     }

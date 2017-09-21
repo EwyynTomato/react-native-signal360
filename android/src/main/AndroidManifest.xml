@@ -19,14 +19,15 @@
         </receiver>
     </application>
 
+    <!-- For Bluetooth LE signals -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- For enabling Signal based on location, GPS is NOT turned on.  -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- For audio signal decoding -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- For background processing of signal -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- For Bluetooth LE signals -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 </manifest>
   
