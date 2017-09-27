@@ -21,13 +21,6 @@ const Signal360 = {
 		RNSignal360.setGuid(guid);
 	},
 
-	/**
-	 * Set the text for Ask Permission modal window
-	 */
-	setAskPermissionString: function(text) {
-		RNSignal360.setAskPermissionString(text);
-	},
-
     /**
      * Start Signal360 service to listen to Sonic device
      */

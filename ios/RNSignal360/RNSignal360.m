@@ -14,10 +14,6 @@ RCT_EXPORT_METHOD(setGuid:(NSString *)guid) {
     self.deviceGuid = guid;
 }
 
-RCT_EXPORT_METHOD(setAskPermissionString:(NSString *)text) {
-    //This only works on Android
-}
-
 RCT_EXPORT_METHOD(start) {
     [[Signal sharedInstance] requestLocationAlwaysPermission];
     [[Signal sharedInstance] requestNotificationPermission];

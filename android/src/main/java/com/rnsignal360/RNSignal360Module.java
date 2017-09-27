@@ -11,7 +11,6 @@ import com.signal360.sdk.core.internal.SignalInternal;
 
 public class RNSignal360Module extends ReactContextBaseJavaModule {
     private String guid = "DEFAULT";
-    private String askPermissionString = "LOCATION and MICROPHONE permission is required";
 
     private RNSignal360Client rnSignal360Client;
     private boolean isInitialized = false;
@@ -29,14 +28,10 @@ public class RNSignal360Module extends ReactContextBaseJavaModule {
     }
 
     public static void onRequestPermissionsResult(Activity activity, int requestCode, String permissions[], int[] grantResults) {
-        if (grantResults[0] == -1 || grantResults[1] == -1) {
-            //- permission is not granted, stop Signal from listening
-            // (note that dismissing alert window won't stop Signal Service, customize requestPermission to handle this)
-            Signal.get().stop();
-            Signal.get().clear();
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0) {
+            Signal.get().onRequestPermissionsResult(activity, requestCode, permissions, grantResults);
         }
-
-        Signal.get().onRequestPermissionsResult(activity, requestCode, permissions, grantResults);
     }
 
     private Activity getActivity() {
@@ -46,11 +41,6 @@ public class RNSignal360Module extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setGuid(String guid) {
         this.guid = guid;
-    }
-
-    @ReactMethod
-    public void setAskPermissionString(String askPermissionString) {
-        this.askPermissionString = askPermissionString;
     }
 
     public void initialize() {
@@ -70,7 +60,6 @@ public class RNSignal360Module extends ReactContextBaseJavaModule {
 
         //- Check com.signal360.sdk.core.internal.SignalInternal > requestPermissions to customize request permission
         SignalInternal.getInternal().setUseBluetooth(true);
-        Signal.get().requestPermissions(activity, askPermissionString);
         Signal.get().onActivityResume(activity);
     }
 
